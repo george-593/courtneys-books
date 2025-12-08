@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+    db:
+        image: postgres
+        container_name: courtneys-books-db-postgres
+        environment:
+            POSTGRES_USER: ${POSTGRES_USER}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+            POSTGRES_DB: ${POSTGRES_DB}
+        ports:
+            - "${POSTGRES_PORT}:5432"
+        networks:
+            - courtneys-books-network
+        volumes:
+            - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+        restart: always
+
+networks:
+    courtneys-books-network:
+        driver: bridge
