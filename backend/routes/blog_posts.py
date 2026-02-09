@@ -6,7 +6,9 @@ from backend import models, schemas, dependencies
 router = APIRouter()
 
 
-@router.post("/", response_model=schemas.BlogPostOut)
+@router.post(
+    "/", response_model=schemas.BlogPostOut, status_code=status.HTTP_201_CREATED
+)
 async def create_blog_post(
     post: schemas.BlogPostCreate, db: AsyncSession = Depends(dependencies.get_db)
 ):
