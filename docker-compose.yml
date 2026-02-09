@@ -4,7 +4,7 @@ services:
   database:
     image: 'postgres:latest'
     ports:
-      - 15432:5432
+      - 127.0.0.1:15432:5432
     env_file:
       - .env
     networks:
@@ -15,7 +15,7 @@ services:
   pgadmin:
     image: dpage/pgadmin4
     ports:
-      - 15433:80
+      - 127.0.0.1:15433:80
     env_file:
       - .env
     depends_on:
