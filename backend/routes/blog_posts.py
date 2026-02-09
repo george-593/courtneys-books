@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from backend import models, schemas, dependencies
@@ -34,3 +34,25 @@ async def get_blog_post(post_id: int, db: AsyncSession = Depends(dependencies.ge
     if post is None:
         raise HTTPException(status_code=404, detail="Blog post not found")
     return post
+
+
+@router.put("/{post_id}", response_model=schemas.BlogPostOut)
+async def put_blog_post(
+    post_id: int,
+    post: schemas.BlogPostCreate,
+    db: AsyncSession = Depends(dependencies.get_db),
+):
+    result = await db.execute(
+        select(models.BlogPost).where(models.BlogPost.id == post_id)
+    )
+    existing_post = result.scalar_one_or_none()
+
+    if existing_post is None:
+        raise HTTPException(status_code=404, detail="Blog post not found")
+
+    existing_post.title = post.title
+    existing_post.content = post.content
+    db.add(existing_post)
+    await db.commit()
+    await db.refresh(existing_post)
+    return existing_post
