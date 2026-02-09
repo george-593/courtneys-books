@@ -1,5 +1,8 @@
-CREATE TABLE public.posts (
+-- Create blogposts table
+CREATE TABLE IF NOT EXISTS blogposts (
     id SERIAL PRIMARY KEY,
-    title varchar(255),
-    contents text
+    title VARCHAR(255) NOT NULL,
+    content TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 )
