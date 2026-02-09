@@ -18,6 +18,6 @@ async def create_blog_post(
 
 
 @router.get("/", response_model=list[schemas.BlogPostOut])
-async def get_blog_post(db: AsyncSession = Depends(dependencies.get_db)):
+async def get_blog_posts(db: AsyncSession = Depends(dependencies.get_db)):
     result = await db.execute(select(models.BlogPost))
     return result.scalars().all()
