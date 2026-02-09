@@ -1,34 +1,30 @@
+# Postgres docker-compose from https://github.com/felipewom/docker-compose-postgres
+
 services:
-  backend:
-    build:
-      context: .
-      dockerfile: backend/DockerFile
+  database:
+    image: 'postgres:latest'
     ports:
-      - "8080:80"
-    environment:
-      - ASPNETCORE_URLS=http://+80
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__DefaultConnection=Host=postgres;username=postgres;password=postgres;database=db_name;TrustServerCertificate=True;
-    depends_on:
-      - postgres
-
-  postgres:
-    image: postgres:alpine
-    restart: always
-    container_name: postgres
-    healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    environment:
-      POSTGRES_DB: db_name
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      - 15432:5432
+    env_file:
+      - .env
+    networks:
+      - postgres-network
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
+      - ${PWD}/data/db-data/:/var/lib/postgresql/data/
 
-volumes:
-  postgres_data:
+  pgadmin:
+    image: dpage/pgadmin4
+    ports:
+      - 15433:80
+    env_file:
+      - .env
+    depends_on:
+      - database
+    networks:
+      - postgres-network
+    volumes:
+      - ${PWD}/data/pgadmin-data/:/var/lib/pgadmin/
+
+networks:
+  postgres-network:
+    driver: bridge
