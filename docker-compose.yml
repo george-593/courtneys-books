@@ -10,7 +10,7 @@ services:
     networks:
       - postgres-network
     volumes:
-      - ${PWD}/data/db-data/:/var/lib/postgresql/data/
+      - ./data/db-data/:/var/lib/postgresql/data/
 
   pgadmin:
     image: dpage/pgadmin4
@@ -23,7 +23,7 @@ services:
     networks:
       - postgres-network
     volumes:
-      - ${PWD}/data/pgadmin-data/:/var/lib/pgadmin/
+      - ./data/pgadmin-data/:/var/lib/pgadmin/
 
 networks:
   postgres-network:
