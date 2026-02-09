@@ -80,3 +80,18 @@ async def patch_blog_post(
     await db.commit()
     await db.refresh(existing_post)
     return existing_post
+
+
+@router.delete("/{post_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_blog_post(
+    post_id: int, db: AsyncSession = Depends(dependencies.get_db)
+):
+    result = await db.execute(
+        select(models.BlogPost).where(models.BlogPost.id == post_id),
+    )
+    post = result.scalar_one_or_none()
+    if post is None:
+        raise HTTPException(status_code=404, detail="Blog post not found")
+
+    await db.delete(post)
+    await db.commit()
