@@ -3,7 +3,7 @@ from backend.routes import blog_posts
 
 app = FastAPI()
 
-app.include_router(blog_posts.router, prefix="/blog_posts", tags=["Blog Posts"])
+app.include_router(blog_posts.router, prefix="/blog-posts", tags=["Blog Posts"])
 
 
 @app.get("/")
