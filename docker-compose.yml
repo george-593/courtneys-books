@@ -8,11 +8,33 @@ services:
     env_file:
       - .env
     networks:
-      - postgres-network
+      - api-network
     volumes:
-      - ./db/data/db-data/:/var/lib/postgresql/data/
+      - postgres_data:/var/lib/postgresql/data/
       - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/DockerFile
+    ports:
+      - "8000:8000"
+    depends_on:
+      - database
+    env_file:
+      - .env
+    environment:
+      # Overrides for docker from dev values in .env
+      - POSTGRES_HOST=database
+      - POSTGRES_PORT=5432
+    networks:
+      - api-network
+    restart: unless-stopped
 
 networks:
-  postgres-network:
+  api-network:
     driver: bridge
+
+volumes:
+  postgres_data:
