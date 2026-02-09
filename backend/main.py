@@ -8,4 +8,4 @@ app.include_router(blog_posts.router, prefix="/blog_posts", tags=["Blog Posts"])
 
 @app.get("/")
 def get_root():
-    return {"API Online"}
+    return {"status": "API Online"}
