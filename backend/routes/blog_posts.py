@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Response
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from backend import models, schemas, dependencies
@@ -82,7 +82,9 @@ async def patch_blog_post(
     return existing_post
 
 
-@router.delete("/{post_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete(
+    "/{post_id}", status_code=status.HTTP_204_NO_CONTENT, response_class=Response
+)
 async def delete_blog_post(
     post_id: int, db: AsyncSession = Depends(dependencies.get_db)
 ):
