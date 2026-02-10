@@ -9,7 +9,7 @@ class Settings(BaseSettings):
     POSTGRES_PORT: int = 5432
 
     debug: bool = False
-    port: int = 5000
+    api_port: int = 5000
 
     model_config = SettingsConfigDict(env_file="../.env")
 
